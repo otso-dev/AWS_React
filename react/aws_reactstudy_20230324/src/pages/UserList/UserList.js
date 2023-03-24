@@ -40,6 +40,9 @@ const UserList = () => {
         default:
           addButtonRef.current.click();
       }
+      if (index !== 0) {
+        inputRefs[index].current.focus();
+      }
     }
   };
 
