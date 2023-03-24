@@ -1,53 +1,53 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState } from "react";
 
 const InputSample = () => {
-    const userInfo = {
-        username: '',
-        password: ''
-    }
-    const [userInput, setUserInput] = useState(userInfo);
-    const [userInputText, setUserInputText] = useState(userInfo);
-    
-    const { username, password } = userInputText;
+  const userInfo = {
+    username: "",
+    password: "",
+  };
+  const [userInput, setUserInput] = useState(userInfo);
+  const [userInputText, setUserInputText] = useState(userInfo);
 
-    const passwordRef = useRef();
+  const { username, password } = userInputText;
 
-    const handlerChange= (e) =>{
-        const {name, value} = e.target;
-        setUserInput({...userInput, [name]: value}); // 기존의 값을 key: value로 덮음
-    }
+  const passwordRef = useRef();
 
-    const nextFocus = (e) =>{
-        if(e.keyCode === 13){
-            passwordRef.current.focus();
-        }
-    }
+  const handlerChange = (e) => {
+    const { name, value } = e.target;
+    setUserInput({ ...userInput, [name]: value }); // 기존의 값을 key: value로 덮음
+  };
 
-    const submitHandler = (e) =>{
-        if(e.keyCode === 13){
-            setUserInputText({...userInput});
-        }
+  const nextFocus = (e) => {
+    if (e.keyCode === 13) {
+      passwordRef.current.focus();
     }
-    
-    return (
-        <div>
-            <input 
-                type="text" 
-                onChange={handlerChange} 
-                onKeyUp={nextFocus} 
-                name="username"
-            />
-            <input 
-                type="text"
-                onChange={handlerChange}
-                onKeyUp={submitHandler} 
-                name="password" 
-                ref={passwordRef}
-            />
-            <div>username: {username}</div>
-            <div>password: {password}</div>
-        </div>
-    );
+  };
+
+  const submitHandler = (e) => {
+    if (e.keyCode === 13) {
+      setUserInputText({ ...userInput });
+    }
+  };
+
+  return (
+    <div>
+      <input
+        type="text"
+        onChange={handlerChange}
+        onKeyUp={nextFocus}
+        name="username"
+      />
+      <input
+        type="text"
+        onChange={handlerChange}
+        onKeyUp={submitHandler}
+        name="password"
+        ref={passwordRef}
+      />
+      <div>username: {username}</div>
+      <div>password: {password}</div>
+    </div>
+  );
 };
 
 export default InputSample;
