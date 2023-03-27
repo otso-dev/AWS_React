@@ -61,6 +61,23 @@ const MainAside = () => {
               },
             ],
           },
+          {
+            title: "Todo",
+            itemId: "/todo",
+            elemBefore: () => <Icon name="calendar" />,
+            subNav: [
+              {
+                title: "ToDoList",
+                itemId: "/todo/1",
+                elemBefore: () => <Icon name="check" />,
+              },
+              {
+                title: "ToDoList_ex",
+                itemId: "/todo/ex",
+                elemBefore: () => <Icon name="check" />,
+              },
+            ],
+          },
         ]}
       />
     </aside>

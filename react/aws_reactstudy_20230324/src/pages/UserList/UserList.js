@@ -53,7 +53,7 @@ const UserList = () => {
     const user = {
       ...inputs,
     };
-
+    console.log(user);
     user.id = userIndex.current++;
 
     setUsers([...users, user]);
@@ -73,10 +73,10 @@ const UserList = () => {
       users.map((user) => {
         //map을 써서 해당 유저와 클릭했을때 해당 user.id의 index의 값이 같으면
         if (user.id === index) {
-          setInputs({ ...user }); // 해당 유저의 수정된 값을 setInputs을 이용해 값을 전달하고
-          user.modifyFlag = true; // 수정을 했으므로 true
+          setInputs({ ...user });
+          user.modifyFlag = true;
         } else {
-          user.modifyFlag = false; // 아니면 false
+          user.modifyFlag = false;
         }
         return user;
       })
@@ -88,10 +88,9 @@ const UserList = () => {
     setUsers(
       users.map((user) => {
         if (user.id === index) {
-          user.modifyFlag = true;
           return {
             ...inputs,
-            id: user.id,
+            // id: user.id,
           };
         }
         return user;
@@ -103,6 +102,7 @@ const UserList = () => {
     <div css={S.container}>
       <div>
         <input
+          css={S.Input}
           type="text"
           onKeyUp={keyupHandler}
           onChange={inputHandler}
@@ -111,6 +111,7 @@ const UserList = () => {
           ref={inputRefs[0]}
         />
         <input
+          css={S.Input}
           type="text"
           onKeyUp={keyupHandler}
           onChange={inputHandler}
@@ -119,6 +120,7 @@ const UserList = () => {
           ref={inputRefs[1]}
         />
         <input
+          css={S.Input}
           type="text"
           onKeyUp={keyupHandler}
           onChange={inputHandler}
@@ -127,6 +129,7 @@ const UserList = () => {
           ref={inputRefs[2]}
         />
         <input
+          css={S.Input}
           type="text"
           onKeyUp={keyupHandler}
           onChange={inputHandler}
