@@ -103,6 +103,7 @@ const Todo_ex = () => {
   const [input, setInput] = useState({
     id: 0,
     content: "",
+    modifyFalg: false,
   });
 
   const [todoList, setTodoList] = useState([]);
@@ -138,6 +139,32 @@ const Todo_ex = () => {
       })
     );
   };
+
+  const onModify = (id) => {
+    setTodoList(
+      todoList.map((todo) => {
+        if (todo.id === id) {
+          setInput({ ...input });
+          todo.modifyFalg = true;
+        } else {
+          todo.modifyFalg = false;
+        }
+        return todo;
+      })
+    );
+  };
+
+  const onSave = (id) => {
+    setTodoList(
+      todoList.map((todo) => {
+        if (todo.id === id) {
+          return { ...input };
+        }
+        return todo;
+      })
+    );
+  };
+
   return (
     <div css={TodoContainer}>
       <div css={TodoAddition}>
@@ -156,11 +183,30 @@ const Todo_ex = () => {
       {todoList.map((todo) => {
         return (
           <div css={TodoList} key={todo.id}>
-            <div css={TodoContent}>{todo.content}</div>
+            <div css={TodoContent}>
+              {todo.modifyFalg ? (
+                <input
+                  css={AdditionInput}
+                  type="text"
+                  placeholder="Add your new Todo"
+                  onChange={onChange}
+                  onKeyUp={onKeyUp}
+                />
+              ) : (
+                todo.content
+              )}
+            </div>
             <div css={ItemGroup}>
-              <button css={ItemButton}>
-                <Icon name="edit-pencil-simple" />
-              </button>
+              {todo.modifyFalg ? (
+                <button css={ItemButton} onClick={() => onSave(todo.id)}>
+                  <Icon name="check" />
+                </button>
+              ) : (
+                <button css={ItemButton} onClick={() => onModify(todo.id)}>
+                  <Icon name="edit-pencil-simple" />
+                </button>
+              )}
+
               <button css={ItemButton} onClick={() => onRemove(todo.id)}>
                 <Icon name="trash" />
               </button>
