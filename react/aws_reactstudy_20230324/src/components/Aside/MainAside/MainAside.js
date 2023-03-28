@@ -76,6 +76,11 @@ const MainAside = () => {
                 itemId: "/todo/ex",
                 elemBefore: () => <Icon name="check" />,
               },
+              {
+                title: "NumberCount",
+                itemId: "/number/count",
+                elemBefore: () => <Icon name="check" />,
+              },
             ],
           },
         ]}

@@ -6,6 +6,7 @@ import { reset } from "./styles/Global/reset";
 import UserList from "./pages/UserList/UserList";
 import Todo from "./pages/Todo/Todo";
 import Todo_ex from "./pages/Todo_ex/Todo_ex";
+import NumberCounter from "./pages/NumberCounter/NumberCounter";
 
 function Test1() {
   return <h1>test1</h1>;
@@ -27,6 +28,7 @@ function App() {
         <Route path="/users/1" Component={UserList} />
         <Route path="/todo/1" Component={Todo} />
         <Route path="/todo/ex" Component={Todo_ex} />
+        <Route path="/number/count" Component={NumberCounter} />
       </Routes>
     </>
   );
