@@ -1,9 +1,10 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
-import Icon from "awesome-react-icons";
-import React from "react";
 import { useRef } from "react";
 import { useState } from "react";
+import AddTodo from "../../components/Todo_ex/AddTodo/AddTodo";
+import PromptModal from "./../../components/Todo_ex/Modal/PromptModal/PromptModal";
+import TodoList from "./../../components/Todo_ex/TodoList/TodoList";
 
 const TodoContainer = css`
   display: flex;
@@ -11,92 +12,6 @@ const TodoContainer = css`
   align-items: center;
   margin-top: 100px;
   width: 100%;
-`;
-
-const TodoAddition = css`
-  position: sticky;
-  top: 0px;
-  box-sizing: border-box;
-  margin-bottom: 20px;
-  border-radius: 7px;
-  padding: 10px;
-  width: 600px;
-  height: 60px;
-
-  background-color: #eee;
-`;
-
-const AdditionInput = css`
-  box-sizing: border-box;
-  outline: none;
-  border: none;
-  border-bottom: 3px solid white;
-  padding: 0px 50px 0px 10px;
-
-  width: 100%;
-  height: 100%;
-
-  font-size: 1.2rem;
-  background-color: #eee;
-`;
-
-const TodoAddButton = css`
-  position: absolute;
-  transform: translateY(-50%);
-  top: 50%;
-  right: 15px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border: none;
-  padding: 0;
-  width: 35px;
-  height: 35px;
-
-  background-color: #ffffff00;
-  transition: 1s all;
-  cursor: pointer;
-  &:hover {
-    right: 15px;
-    transform: translateY(-50%) rotate(180deg) scale(1.5);
-  }
-`;
-
-const TodoList = css`
-  box-sizing: border-box;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 5px;
-  border-radius: 7px;
-  padding: 10px;
-  width: 600px;
-
-  background-color: #dbdbdb;
-`;
-
-const TodoContent = css`
-  width: 85%;
-  height: 40px;
-`;
-
-const ItemGroup = css`
-  display: flex;
-  align-items: center;
-  height: 40px;
-`;
-
-const ItemButton = css`
-  display: flex;
-  align-items: center;
-  border: none;
-  height: 100%;
-  color: #999;
-  background-color: #ffffff00;
-  cursor: pointer;
-  &:hover {
-    color: #121212;
-  }
 `;
 
 const Todo_ex = () => {
@@ -107,6 +22,12 @@ const Todo_ex = () => {
   });
 
   const [todoList, setTodoList] = useState([]);
+
+  const [isOpen, setIsOpen] = useState(false);
+  const [modifyTodo, setModifyTodo] = useState({
+    id: 0,
+    content: "",
+  });
 
   const todoId = useRef(1);
 
@@ -119,11 +40,11 @@ const Todo_ex = () => {
 
   const onKeyUp = (e) => {
     if (e.keyCode === 13) {
-      onClick();
+      onAdd();
     }
   };
 
-  const onClick = () => {
+  const onAdd = () => {
     const todo = {
       ...input,
       id: todoId.current++,
@@ -140,81 +61,53 @@ const Todo_ex = () => {
     );
   };
 
-  const onModify = (id) => {
+  const updateTodo = (modifyTodo) => {
     setTodoList(
       todoList.map((todo) => {
-        if (todo.id === id) {
-          setInput({ ...input });
-          todo.modifyFalg = true;
-        } else {
-          todo.modifyFalg = false;
+        if (todo.id === modifyTodo.id) {
+          todo.content = modifyTodo.content;
         }
         return todo;
       })
     );
   };
 
-  const onSave = (id) => {
-    setTodoList(
-      todoList.map((todo) => {
-        if (todo.id === id) {
-          return { ...input };
-        }
-        return todo;
-      })
-    );
+  const openModal = (id) => {
+    setModifyTodo(todoList.filter((todo) => todo.id === id)[0]);
+    setIsOpen(true);
   };
 
   return (
-    <div css={TodoContainer}>
-      <div css={TodoAddition}>
-        <input
-          css={AdditionInput}
-          type="text"
-          placeholder="Add your new Todo"
+    <>
+      <div css={TodoContainer}>
+        <AddTodo
           onChange={onChange}
           onKeyUp={onKeyUp}
           value={input.content}
+          onAdd={onAdd}
         />
-        <button css={TodoAddButton} onClick={onClick}>
-          <Icon name="plus" />
-        </button>
+        {todoList.map((todo) => {
+          return (
+            <TodoList
+              todo={todo}
+              openModal={openModal}
+              onRemove={onRemove}
+              key={todo.id}
+            />
+          );
+        })}
       </div>
-      {todoList.map((todo) => {
-        return (
-          <div css={TodoList} key={todo.id}>
-            <div css={TodoContent}>
-              {todo.modifyFalg ? (
-                <input
-                  css={AdditionInput}
-                  type="text"
-                  placeholder="Add your new Todo"
-                  onChange={onChange}
-                  onKeyUp={onKeyUp}
-                />
-              ) : (
-                todo.content
-              )}
-            </div>
-            <div css={ItemGroup}>
-              {todo.modifyFalg ? (
-                <button css={ItemButton} onClick={() => onSave(todo.id)}>
-                  <Icon name="check" />
-                </button>
-              ) : (
-                <button css={ItemButton} onClick={() => onModify(todo.id)}>
-                  <Icon name="edit-pencil-simple" />
-                </button>
-              )}
-
-              <button css={ItemButton} onClick={() => onRemove(todo.id)}>
-                <Icon name="trash" />
-              </button>
-            </div>
-          </div>
-        );
-      })}
-    </div>
+      {isOpen ? (
+        <PromptModal
+          title={"Edit Todo"}
+          todo={modifyTodo}
+          setIsOpen={setIsOpen}
+          updateTodo={updateTodo}
+        />
+      ) : (
+        ""
+      )}
+    </>
   );
 };
 
